@@ -1,6 +1,7 @@
 import { Server } from "socket.io";
 import Redis from "ioredis";
 import { config } from "dotenv";
+import prismaClient from "./prisma";
 
 config();
 
@@ -35,15 +36,20 @@ class SocketService {
       console.log("New Socket Connected. ", socket.id);
 
       socket.on("event:message", async ({ message }: { message: string }) => {
-        console.log("New message received from redis -> ", message);
-
         await pub.publish("MESSAGES", JSON.stringify({ message }));
       });
     });
 
     sub.on("message", async (channel, message) => {
       if (channel === "MESSAGES") {
+        console.log("New message received from redis -> ", message);
         io.emit("message", message);
+
+        await prismaClient.message.create({
+          data: {
+            text: message,
+          },
+        });
       }
     });
   }
