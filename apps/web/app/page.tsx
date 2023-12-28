@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSocket } from "../context/SocketProvider";
 import "./globals.css";
 
 export default function Page() {
   const { sendMessage, messages } = useSocket();
   const [message, setMessage] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) inputRef.current.focus();
+  }, []);
 
   const handleKeyPress = (e: { key: string }) => {
     if (e.key === "Enter") {
@@ -18,12 +23,13 @@ export default function Page() {
     sendMessage(message);
     setMessage("");
   };
-  
+
   return (
     <main>
       <h1 className="mt-4 text-6xl text-center text-pink-500">Messages</h1>
       <div className="flex justify-center mt-6">
         <input
+          ref={inputRef}
           type="text"
           placeholder="Type here..."
           value={message}
