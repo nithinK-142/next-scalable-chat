@@ -54,7 +54,7 @@ export async function startMessageConsumer() {
           },
         });
       } catch (err) {
-        console.log("Holt your titts for a bit!!");
+        console.log("Hold your horses!!");
         pause();
         setTimeout(() => {
           consumer.resume([{ topic: "MESSAGES" }]);

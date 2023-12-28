@@ -47,13 +47,6 @@ class SocketService {
 
         await produceMessage(message);
         console.log("Message produced to kafka broker.");
-
-        // await prismaClient.message.create({
-        //   data: {
-        //     text: message,
-        //   },
-        // });
-
       }
     });
   }
